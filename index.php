@@ -1,0 +1,433 @@
+<?php
+if (!isset($_SESSION)) {
+    session_start();
+}
+function getActive($name)
+{
+    if ($name == ($_GET['r'] ?? '')) {
+        echo 'active';
+    } else {
+        echo '';
+    }
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Stock</title>
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: "Noto Sans Thai", serif;
+            font-style: normal;
+            font-weight: 400;
+        }
+    </style>
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="vendor/alertify/css/alertify.css">
+    <link rel="stylesheet" href="vendor/alertify/css/themes/bootstrap.css">
+    <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+</head>
+
+<body id="page-top">
+    <div id="wrapper">
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
+                <div class="sidebar-brand-text mx-3">Stock <sup>Management</sup></div>
+            </a>
+            <hr class="sidebar-divider my-0">
+            <li class="nav-item <?= getActive('dashboard') ?>">
+                <a class="nav-link" href="index?r=dashboard">
+                    <i class="fa-solid fa-gauge"></i>
+                    <span>แดชบอร์ด</span></a>
+            </li>
+            <hr class="sidebar-divider">
+            <div class="sidebar-heading">
+                งานประจำวัน
+            </div>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                    aria-expanded="true" aria-controls="collapseTwo">
+                    <i class="fa-solid fa-arrow-trend-up"></i>
+                    <span>งานประจำวัน</span>
+                </a>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item <?= getActive('sale') ?>" href="index?r=sale"><i
+                                class="fa-solid fa-cubes-stacked"></i> เบิกสินค้า</a>
+                        <a class="collapse-item <?= getActive('import') ?>" href="index?r=import"><i
+                                class="fa-solid fa-file-import"></i> รับเข้าสินค้า</a>
+                    </div>
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBasic"
+                    aria-expanded="true" aria-controls="collapseBasic">
+                    <i class="fa-solid fa-print"></i>
+                    <span>ตั้งค่าพื้นฐาน</span>
+                </a>
+                <div id="collapseBasic" class="collapse" aria-labelledby="headingBasic"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="index?r=product">
+                            <i class="fa-solid fa-box-open"></i>
+                            <span>จัดการสินค้า</span></a>
+                        <a class="collapse-item" href="index?r=category">
+                            <i class="fa-solid fa-layer-group"></i>
+                            <span>จัดการหมวดหมู่</span></a>
+                        <a class="collapse-item" href="index?r=member">
+                            <i class="fa-solid fa-arrows-split-up-and-left"></i>
+                            <span>จัดการสมาชิก</span></a>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+                    aria-expanded="true" aria-controls="collapseUtilities">
+                    <i class="fa-solid fa-print"></i>
+                    <span>รายงาน</span>
+                </a>
+                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item <?= getActive('report-sale') ?>" href="index?r=report-sale"><i
+                                class="fa-solid fa-file-import"></i> รายงานเบิกสินค้า</a>
+                        <a class="collapse-item <?= getActive('report-import') ?>" href="index?r=report-import"><i
+                                class="fa-solid fa-download"></i> รายงานนำเข้าสินค้า</a>
+                        <a class="collapse-item <?= getActive('stock') ?>" href="index?r=stock"><i
+                                class="fa-solid fa-boxes-stacked"></i> สินค้าคงเหลือ</a>
+                    </div>
+                </div>
+            </li>
+
+        </ul>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                    <!-- Sidebar Toggle (Topbar) -->
+                     <?php if ($_GET['r'] == 'product') :  ?>
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    <!-- Topbar Search -->
+                    <form                    
+                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        <div class="input-group">
+                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                                aria-label="Search" aria-describedby="basic-addon2" required>
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <?php endif; ?>
+
+                    <!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">
+
+                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+                        <li class="nav-item dropdown no-arrow d-sm-none">
+                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-search fa-fw"></i>
+                            </a>
+                            <!-- Dropdown - Messages -->
+                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                                aria-labelledby="searchDropdown">
+                                <form class="form-inline mr-auto w-100 navbar-search">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control bg-light border-0 small"
+                                            placeholder="Search for..." aria-label="Search"
+                                            aria-describedby="basic-addon2" required>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="button">
+                                                <i class="fas fa-search fa-sm"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </li>
+
+                        <!-- Nav Item - Alerts -->
+                        <li class="nav-item dropdown no-arrow mx-1">
+                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-bell fa-fw"></i>
+                                <!-- Counter - Alerts -->
+                                <span class="badge badge-danger badge-counter">3+</span>
+                            </a>
+                            <!-- Dropdown - Alerts -->
+                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="alertsDropdown">
+                                <h6 class="dropdown-header">
+                                    Alerts Center
+                                </h6>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-primary">
+                                            <i class="fas fa-file-alt text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">December 12, 2019</div>
+                                        <span class="font-weight-bold">A new monthly report is ready to download!</span>
+                                    </div>
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-success">
+                                            <i class="fas fa-donate text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">December 7, 2019</div>
+                                        $290.29 has been deposited into your account!
+                                    </div>
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-warning">
+                                            <i class="fas fa-exclamation-triangle text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">December 2, 2019</div>
+                                        Spending Alert: We've noticed unusually high spending for your account.
+                                    </div>
+                                </a>
+                                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+                            </div>
+                        </li>
+
+                        <div class="topbar-divider d-none d-sm-block"></div>
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span
+                                    class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $_SESSION['username'] ?></span>
+                                <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="#" onclick="javascript:void(0)" id="btn-setting">
+                                    <i class="fas fa-sliders mr-2 text-gray-400"></i>
+                                    ตั้งค่า
+                                </a>
+                                <a class="dropdown-item" href="#" onclick="javascript:void(0)" id="btn-change-password">
+                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    เปลี่ยนรหัสผ่าน
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    ออกจากระบบ
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </nav>
+                <!-- Scripting  -->
+                <script src="vendor/jquery/jquery.min.js"></script>
+                <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+                <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+                <script src="js/sb-admin-2.min.js"></script>
+                <script src="vendor/datatables/jquery.dataTables.min.js"></script>
+                <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+                <script src="vendor/chart.js/Chart.min.js"></script>
+                <script src="vendor/alertify/alertify.min.js"></script>
+                <script type="text/javascript">
+                    alertify.defaults.theme.ok = "btn btn-primary";
+                    alertify.defaults.theme.cancel = "btn btn-danger";
+                    alertify.defaults.theme.input = "form-control";
+                </script>
+                <!-- Scripting  -->
+                <!-- Content  -->
+                <div class="container-fluid">
+                    <?php
+                    $r = $_GET['r'] ?? '';
+                    switch ($r) {
+                        case 'dashboard':
+                            include 'page/dashboard.php';
+                            break;
+                        case 'sale':
+                            include 'page/sale.php';
+                            break;
+                        case 'import':
+                            include 'page/import.php';
+                            break;
+                        case 'member':
+                            include 'page/member.php';
+                            break;
+                        case 'category':
+                            include 'page/category.php';
+                            break;
+                        case 'product':
+                            include 'page/product.php';
+                            break;
+                        case 'stock':
+                            include 'page/stock.php';
+                            break;
+                        case 'report-import':
+                            include 'page/report-import.php';
+                            break;
+                        case 'report-sale':
+                            include 'page/report-sale.php';
+                            break;
+                        default:
+                            include '404.php';
+                            break;
+                    }
+                    ?>
+                </div>
+                <!-- Content  -->
+            </div>
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; Thananphaphakhr 2025</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- Footer -->
+        </div>
+    </div>
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Confirm to logout.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="logout.php">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    $(document).ready(function() {
+
+        if (localStorage.getItem("print") === null) {
+            localStorage.setItem("print", "true");
+        }
+
+        $("#btn-change-password").click(function(e) {
+            e.preventDefault();
+            let user_id = "<?= $_SESSION['userid'] ?>";
+            let strHtml = `
+                <form id="form-password">
+                    <input type="text" class="form-control" name="pass1" placeholder="รหัสผ่านใหม่">
+                    <p></p>
+                    <input type="text" class="form-control" name="pass2" placeholder="รหัสผ่านใหม่ (ยืนยัน)">
+                </form>
+            `;
+            alertify.confirm().destroy();
+            alertify.confirm(
+                "เปลี่ยนรหัสผ่าน",
+                strHtml,
+                () => {
+                    // 1. ดึงค่าจากช่องรหัสผ่านทั้ง 2 ช่องมาเก็บในตัวแปรเพื่อเช็คก่อน
+                    let pass1 = $("input[name='pass1']").val().trim();
+                    let pass2 = $("input[name='pass2']").val().trim();
+
+                    // 2. [ดักจับ required] ถ้าช่องใดช่องหนึ่งว่าง ให้แจ้งเตือนและหยุดทำงานทันที
+                    if (pass1 === "" || pass2 === "") {
+                        alertify.error("กรุณากรอกรหัสผ่านให้ครบถ้วน");
+                        return false; // สั่งห้ามส่งข้อมูล และดึงให้กล่อง Alertify เปิดค้างไว้ก่อน
+                    }
+
+                    // 3. [แถมให้] เช็คต่อว่ารหัสผ่านใหม่ทั้ง 2 ช่องพิมพ์ตรงกันหรือไม่
+                    if (pass1 !== pass2) {
+                        alertify.error("รหัสผ่านใหม่ไม่ตรงกัน กรุณาตรวจสอบอีกครั้ง");
+                        return false;
+                    }
+
+                    // 4. ถ้าผ่านเงื่อนไขทั้งหมดด้านบนแล้ว ถึงจะปล่อยให้ส่งข้อมูล AJAX ไปหลังบ้าน
+                    let formData = $("#form-password").serializeArray();
+                    formData.push({
+                        name: 'type',
+                        value: 'change-password'
+                    });
+                    formData.push({
+                        name: 'id',
+                        value: user_id
+                    });
+
+                    $.post('controller/auth.controller.php', formData, (response) => {
+                        if (response.message == 'success') {
+                            alertify.success("เปลี่ยนรหัสผ่านสำเร็จแล้ว");
+                        } else {
+                            alertify.error("เปลี่ยนรหัสผ่านไม่สำเร็จ");
+                        }
+                    });
+                },
+                () => {}
+            );
+        });
+        $("#btn-setting").click(function(e) {
+            e.preventDefault();
+            let strVal = null;
+            if (localStorage.getItem("print") === 'true') {
+                strVal = `
+                    <input type="checkbox" id="print_bill" value="true" style="width: 20px; height: 20px;" checked> พิมพ์บิล
+                `;
+            } else {
+                strVal = `
+                    <input type="checkbox" id="print_bill" style="width: 20px; height: 20px;" value="true"> พิมพ์บิล
+                `;
+            }
+            alertify.confirm(
+                "ตั้งค่า",
+                strVal,
+                () => {
+                    if ($("#print_bill").is(":checked")) {
+                        localStorage.setItem("print", "true");
+                        console.log("True");
+
+                    } else {
+                        localStorage.setItem("print", "false");
+                        console.log("False");
+                    }
+                },
+                () => {}
+            );
+        });
+
+    });
+</script>
+
+</html>
