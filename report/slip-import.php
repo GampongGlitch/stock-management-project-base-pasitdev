@@ -1,16 +1,17 @@
 <?php
-    // header("Content-type:application/pdf");
-    include './model/import.model.php';
-    date_default_timezone_set("Asia/Bangkok");
-    $id = $_GET['id'] ?? 0;
-    if ($id == 0) {
-        echo "<h1>ไม่มีเลขที่บิล</h1>";
-        exit();
-    }
-    $result = ImportModel::getSlip($id);
-    ?>
+// header("Content-type:application/pdf");
+include './model/import.model.php';
+date_default_timezone_set("Asia/Bangkok");
+$id = $_GET['id'] ?? 0;
+if ($id == 0) {
+    echo "<h1>ไม่มีเลขที่บิล</h1>";
+    exit();
+}
+$result = ImportModel::getSlip($id);
+?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,9 +33,12 @@
             margin: 0;
             padding: 0;
             font-size: 12px;
-            width: 58mm; /* กำหนดความกว้าง */
-            font-family: Arial, sans-serif; /* เลือกฟอนต์ที่พิมพ์ง่าย */
+            width: 58mm;
+            /* กำหนดความกว้าง */
+            font-family: Arial, sans-serif;
+            /* เลือกฟอนต์ที่พิมพ์ง่าย */
         }
+
         @media print {
             body {
                 width: 58mm;
@@ -43,6 +47,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container mt-2" id="container">
         <div align="center">
@@ -50,9 +55,13 @@
             <hr>
         </div>
         <p>
-            เลขที่บิล: <?=$result[1]['bill_id']?><br>
-            วันที่ออกบิล: <?=$result[1]['datetime']?><br>
-            ผู้ขาย: <?=$result[1]['username']?>
+            <?php if (isset($result[1]) && !empty($result[1])) : ?>
+                เลขที่บิล: <?= htmlspecialchars($result[1]['bill_id']) ?><br>
+                วันที่ออกบิล: <?= htmlspecialchars($result[1]['datetime']) ?><br>
+                ผู้ขาย: <?= htmlspecialchars($result[1]['username']) ?>
+            <?php else : ?>
+                <span class="text-danger">ไม่พบข้อมูลบิล</span>
+            <?php endif; ?>
         </p>
         <hr>
         <table class="table table-sm">
@@ -65,10 +74,10 @@
             <?php foreach ($result[0] as $v) { ?>
                 <tr>
                     <td>
-                        <?=$v['product_name']?><br>
+                        <?= $v['product_name'] ?><br>
                         <i>ส่วนลด <?= number_format($v['discount'], 2) ?></i>
                     </td>
-                    <td align="right">(<?=$v['qty']?>)</td>
+                    <td align="right">(<?= $v['qty'] ?>)</td>
                     <td align="right"><?= number_format($v['price'], 2) ?></td>
                     <td align="right"><?= number_format($v['total'], 2) ?></td>
                 </tr>
@@ -78,4 +87,5 @@
         <h6>ยอดสุทธิ <u><?= number_format($result[2]['total'], 2) ?></u></h6>
     </div>
 </body>
+
 </html>

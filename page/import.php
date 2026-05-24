@@ -315,7 +315,7 @@ require 'model/import.model.php';
                             $("#txt-sum-total").text(null);
                             fetchData();
                             if (localStorage.getItem("print") === 'true') {
-                                window.open(`print.php?id=${params.bill_id}&status=import`, "popupWindow", "width=290, height=589, scrollbars=yes");
+                                window.open(`print.php?id=${params.bill_id}&status=import`, "popupWindow", "width=290, height=589, scrollbars=yes");                                
                             }
                             alertify.success("จบการนำเข้าสินค้าแล้ว");
                         } else {
@@ -329,7 +329,7 @@ require 'model/import.model.php';
         $("#btn-last-bill").click(function(e) {
             e.preventDefault();
             const bill = localStorage.getItem("bill_id_import");
-            window.open(`slip-import.php?id=${bill}`, "popupWindow", "width=290, height=589, scrollbars=yes");
+            window.open(`print.php?id=${bill}&status=import`, "popupWindow", "width=290, height=589, scrollbars=yes");
         });
         // Init Loaded 
     });
