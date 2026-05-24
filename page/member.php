@@ -30,10 +30,12 @@
     </table>
 </div>
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
 
-        function fetchData () {
-            $.post('controller/member.controller.php', {type: 'get'}, (response) => {
+        function fetchData() {
+            $.post('controller/member.controller.php', {
+                type: 'get'
+            }, (response) => {
                 if (response.message == 'success') {
                     if (response.data.length > 0) {
                         $('#dataTable').DataTable().destroy();
@@ -53,7 +55,7 @@
                                 bInfo: false,
                                 pageLength: 10
                             });
-                        }); 
+                        });
                     } else {
                         $("#fetch_data").empty();
                     }
@@ -63,9 +65,21 @@
 
         fetchData();
 
-        $("#btn-add").click(function (e) { 
+        $("#btn-add").click(function(e) {
+            // ดึงค่ามาเช็ค
+            let memberName = $("input[name='member_name']").val();
+            let phone = $("input[name='phone']").val();
+
+            if (memberName.trim() === "" || phone.trim() === "") {
+                alertify.error("กรุณากรอกข้อมูลให้ครบถ้วน");
+                return;
+            }
+
             let params = $("#form-member").serializeArray();
-            params.push({ name: "type", value: "add-member" });
+            params.push({
+                name: "type",
+                value: "add-member"
+            });
             $.post('controller/member.controller.php', params, (response) => {
                 if (response.message == 'success') {
                     alertify.success("Saved");
@@ -79,7 +93,10 @@
         $(document).on('click', '#btn-delete', function(e) {
             let id = $(this).data('id');
             let type = $(this).data('type');
-            $.post('controller/member.controller.php', {id: id, type: type}, (response) => {
+            $.post('controller/member.controller.php', {
+                id: id,
+                type: type
+            }, (response) => {
                 if (response.message == 'success') {
                     fetchData();
                     alertify.success("Deleted");
@@ -109,18 +126,30 @@
                 "แก้ไข",
                 strhtml,
                 () => {
+                    // เช็คค่าว่างจากฟอร์มที่เพิ่งสร้างใน strhtml
+                    let editName = $("#edit-form input[name='member_name']").val();
+                    let editPhone = $("#edit-form input[name='phone']").val();
+
+                    if (editName.trim() === "" || editPhone.trim() === "") {
+                        alertify.error("ข้อมูลห้ามเป็นค่าว่าง");
+                        return;
+                    }
+
                     let formData = $("#edit-form").serializeArray();
                     $.post('controller/member.controller.php', formData, (response) => {
                         if (response.message == 'success') {
                             fetchData();
-                            alertify.success("Deleted");
+                            alertify.success("Updated");
                         } else {
-                            alertify.error("Delete Failed");
+                            alertify.error("Update Failed");
                         }
                     })
                 }, () => {}
             );
-            $.post('controller/member.controller.php', {id: id, type: type}, (response) => {
+            $.post('controller/member.controller.php', {
+                id: id,
+                type: type
+            }, (response) => {
                 if (response.message == 'success') {
                     fetchData();
                     alertify.success("Deleted");

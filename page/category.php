@@ -26,10 +26,12 @@
     </table>
 </div>
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
 
-        function fetchData () {
-            $.post('controller/category.controller.php', {type: 'get'}, (response) => {
+        function fetchData() {
+            $.post('controller/category.controller.php', {
+                type: 'get'
+            }, (response) => {
                 if (response.message == 'success') {
                     if (response.data.length > 0) {
                         $('#dataTable').DataTable().destroy();
@@ -49,7 +51,7 @@
                                 bInfo: false,
                                 pageLength: 10
                             });
-                        }); 
+                        });
                     } else {
                         $("#fetch_data").empty();
                     }
@@ -59,9 +61,20 @@
 
         fetchData();
 
-        $("#btn-add").click(function (e) { 
+        $("#btn-add").click(function(e) {
+            // ดึงค่าจาก input ที่ต้องการเช็ค
+            let categoryName = $("input[name='category_name']").val(); // ปรับชื่อ name ให้ตรงกับฟอร์มคุณ
+
+            // เช็คค่าว่าง (trim คือการตัดช่องว่างหน้า-หลังออก)
+            if (categoryName.trim() === "") {
+                alertify.error("กรุณากรอกชื่อหมวดหมู่ด้วยครับ");
+                return; // หยุดการทำงานถ้าค่าว่าง
+            }
             let params = $("#form-category").serializeArray();
-            params.push({ name: "type", value: "add-category" });
+            params.push({
+                name: "type",
+                value: "add-category"
+            });
             $.post('controller/category.controller.php', params, (response) => {
                 if (response.message == 'success') {
                     alertify.success("Saved");
@@ -75,7 +88,10 @@
         $(document).on('click', '#btn-delete', function(e) {
             let id = $(this).data('id');
             let type = $(this).data('type');
-            $.post('controller/category.controller.php', {id: id, type: type}, (response) => {
+            $.post('controller/category.controller.php', {
+                id: id,
+                type: type
+            }, (response) => {
                 if (response.message == 'success') {
                     fetchData();
                     alertify.success("Deleted");
@@ -104,6 +120,14 @@
                 strhtml,
                 () => {
                     let formData = $("#edit-form").serializeArray();
+
+                    // เช็คค่าว่างจากฟอร์มที่เพิ่งสร้างใน strhtml
+                    let categoryName = $("#edit-form input[name='category_name']").val();
+                    if (categoryName.trim() === "") {
+                        alertify.error("ชื่อหมวดหมู่ห้ามเป็นค่าว่าง");
+                        return;
+                    }
+
                     $.post('controller/category.controller.php', formData, (response) => {
                         if (response.message == 'success') {
                             fetchData();
@@ -114,7 +138,10 @@
                     })
                 }, () => {}
             );
-            $.post('controller/category.controller.php', {id: id, type: type}, (response) => {
+            $.post('controller/category.controller.php', {
+                id: id,
+                type: type
+            }, (response) => {
                 if (response.message == 'success') {
                     fetchData();
                     alertify.success("Deleted");
