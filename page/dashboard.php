@@ -74,7 +74,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                                สินค้าหมดสต๊อก</div>
+                                สินค้าหมดสต็อก</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800"><?=DashboardModel::ProductOut()?></div>
                         </div>
                         <div class="col-auto">

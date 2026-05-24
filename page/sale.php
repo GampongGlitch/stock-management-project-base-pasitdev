@@ -168,7 +168,7 @@ require 'model/sale.model.php';
                     fetchData();
                     alertify.success("เพิ่มสินค้าสำเร็จ");
                 } else if (response.message == 'out') {
-                    alertify.warning("ไม่สามารถเบิกได้ สินค้าหมดสต๊อก");
+                    alertify.warning("ไม่สามารถเบิกได้ สินค้าหมดสต็อก");
                 } else {
                     alertify.error("เพิ่มสินค้าไม่สำเร็จ");
                 }

@@ -1,6 +1,6 @@
 <?php include './model/product.model.php'; ?>
 <div class="content">
-    <h1><i class="fa-solid fa-boxes-stacked"></i> รายงานสต๊อกคงเหลือ</h1>
+    <h1><i class="fa-solid fa-boxes-stacked"></i> รายงานสต็อกคงเหลือ</h1>
     <hr>
     <div class="table-responsive" style="overflow-x: hidden;">
         <table class="table table-bordered table-sm" id="dataTable" width="100%">
