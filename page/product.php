@@ -60,14 +60,17 @@
     </div>
 </div>
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
 
-        function generateCode () {
+        function generateCode() {
             var unixTimestamp = Math.floor(Date.now() / 1000);
             $("#txt-product-code").val(unixTimestamp);
         }
+
         function fetchData() {
-            $.post('controller/product.controller.php', { type: 'get' }, (response) => {
+            $.post('controller/product.controller.php', {
+                type: 'get'
+            }, (response) => {
                 if (response.message == 'success') {
                     if (response.data.length > 0) {
                         $('#dataTable').DataTable().destroy();
@@ -98,13 +101,26 @@
 
         generateCode();
 
-        $("#btn-generate-code").click(function (e) {
+        $("#btn-generate-code").click(function(e) {
             generateCode();
         });
-        $("#btn-add").click(function (e) {
+        $("#btn-add").click(function(e) {
             e.preventDefault();
+
+            // 1. ตรวจสอบค่าว่าง (Validation)
+            // ดึงค่าจากฟอร์มโดยมองหา input ที่มีชื่อที่จำเป็น
+            let productName = $("input[name='product_name']").val(); // ชื่อสินค้า
+
+            if (productName.trim() === "") {
+                alertify.error("กรุณากรอกข้อมูลให้ครบถ้วน");
+                return; // หยุดการทำงานทันทีถ้าข้อมูลไม่ครบ
+            }
+
             let params = $("#form-product").serializeArray();
-            params.push({ name: 'type', value: 'add' });
+            params.push({
+                name: 'type',
+                value: 'add'
+            });
             $.post('controller/product.controller.php', params, (response) => {
                 if (response.message == 'success') {
                     alertify.success("Saved");
@@ -116,14 +132,17 @@
                 }
             });
         });
-        $(document).on('click', '#btn-delete', function (e) {
+        $(document).on('click', '#btn-delete', function(e) {
             let id = $(this).data('id');
             let type = $(this).data('type');
             alertify.confirm(
                 "ลบสินค้า",
                 "ยืนยันลบสินค้า",
                 () => {
-                    $.post('controller/product.controller.php', { id: id, type: type }, (response) => {
+                    $.post('controller/product.controller.php', {
+                        id: id,
+                        type: type
+                    }, (response) => {
                         if (response.message == 'success') {
                             fetchData();
                             alertify.success("Deleted");
@@ -132,10 +151,10 @@
                         }
                     });
                 },
-                () => { }
+                () => {}
             );
         });
-        $(document).on('click', '#btn-edit', function (e) {
+        $(document).on('click', '#btn-edit', function(e) {
             let params = {
                 id: $(this).data('id'),
                 product_code: $(this).data('product_code'),
@@ -178,17 +197,21 @@
                             alertify.error("Delete Failed");
                         }
                     })
-                }, () => { }
+                }, () => {}
             );
         });
-        $(document).on('click', '#btn-edit-qty', function (e) {
+        $(document).on('click', '#btn-edit-qty', function(e) {
             e.preventDefault();
             alertify.confirm().destroy();
             alertify.confirm(
                 "แก้ไขจำนวน",
                 `<form id='edit-form-qty'><input type='number' class='form-control' id='txt-edit-qty' value='${$(this).data('qty')}'></form>`,
                 () => {
-                    $.post("controller/product.controller.php", { qty: $("#txt-edit-qty").val(), type: 'edit-qty', id: $(this).data('id') }, (response) => {
+                    $.post("controller/product.controller.php", {
+                        qty: $("#txt-edit-qty").val(),
+                        type: 'edit-qty',
+                        id: $(this).data('id')
+                    }, (response) => {
                         if (response.message == 'success') {
                             fetchData();
                             alertify.success("Edited");
@@ -197,17 +220,21 @@
                         }
                     });
                 },
-                () => { }
+                () => {}
             ).set('closable', false);
         });
-        $(document).on('click', '#btn-edit-price', function (e) {
+        $(document).on('click', '#btn-edit-price', function(e) {
             e.preventDefault();
             alertify.confirm().destroy();
             alertify.confirm(
                 "แก้ไขราคา",
                 `<form id='edit-form-qty'><input type='number' class='form-control' id='txt-edit-price' value='${$(this).data('price')}'></form>`,
                 () => {
-                    $.post("controller/product.controller.php", { price: $("#txt-edit-price").val(), type: 'edit-price', id: $(this).data('id') }, (response) => {
+                    $.post("controller/product.controller.php", {
+                        price: $("#txt-edit-price").val(),
+                        type: 'edit-price',
+                        id: $(this).data('id')
+                    }, (response) => {
                         if (response.message == 'success') {
                             fetchData();
                             alertify.success("Edited");
@@ -216,7 +243,7 @@
                         }
                     });
                 },
-                () => { }
+                () => {}
             ).set('closable', false);
         });
 
