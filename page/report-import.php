@@ -45,6 +45,7 @@
 </div>
 <script>
     $(document).ready(function() {
+        var datetime = '<?php echo date('Y-m-d'); ?>';
         $('#dataTable').DataTable({
             dom: 'Bfrtip', // Add the Buttons container
             buttons: [
@@ -59,9 +60,9 @@
         var strhtml = `
         <form id='report'>
             <label>จากวันที่</label>
-            <input type='date' class='form-control' name='f' placeholder='จากวันที่'>
+            <input type='date' class='form-control' name='f' placeholder='จากวันที่' value='${datetime}'> <br>
             <label>ถึงวันที่</label>
-            <input type='date' class='form-control' name='t' placeholder='ถึงวันที่'>
+            <input type='date' class='form-control' name='t' placeholder='ถึงวันที่' value='${datetime}'> <br>
         </form>
         `;
         <?php if (empty($_GET['start_date']) && empty($_GET['end_date'])) { ?>
