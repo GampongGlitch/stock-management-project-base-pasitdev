@@ -69,7 +69,7 @@
         `;
         <?php if (empty($_GET['start_date']) && empty($_GET['end_date'])) { ?>
             alertify.confirm(
-                'รายงานนำเข้าสินค้า',
+                'รายงานเบิกสินค้า',
                 strhtml,
                 () => {
                     var strFrom = $("#report").serializeArray();

@@ -55,7 +55,7 @@ $showAlerts = false;
             </li>
             <hr class="sidebar-divider">
             <div class="sidebar-heading">
-                งานประจำวัน
+                เมนู                                
             </div>
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
