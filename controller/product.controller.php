@@ -15,8 +15,7 @@ class Product_controller {
         }
     }
     public static function get() {
-        $sql = "
-            SELECT
+        $sql = "SELECT
                 t1.id AS id,
                 t1.product_code AS product_code,
                 t1.product_name AS product_name,
@@ -100,8 +99,7 @@ class Product_controller {
         }
     }
     public static function Add($postData) {
-        $sql = "
-            INSERT INTO
+        $sql = "INSERT INTO
                 product
             SET
                 product_code = '$postData[product_code]',
@@ -122,8 +120,7 @@ class Product_controller {
         }
     }
     public static function Edit($postData) {
-        $sql = "
-            UPDATE
+        $sql = "UPDATE
                 product
             SET
                 product_code = '$postData[product_code]',
@@ -146,8 +143,7 @@ class Product_controller {
         }
     }
     public static function Delete($postData) {
-        $sql = "
-            DELETE FROM
+        $sql = "DELETE FROM
                 product
             WHERE
                 id = $postData[id]
@@ -164,8 +160,7 @@ class Product_controller {
         }
     }
     public static function edit_qty($postData) {
-        $sql = "
-            UPDATE
+        $sql = "UPDATE
                 product
             SET
                 product_qty = '$postData[qty]'
@@ -184,8 +179,7 @@ class Product_controller {
         }
     }
     public static function edit_price($postData) {
-        $sql = "
-            UPDATE
+        $sql = "UPDATE
                 product
             SET
                 product_price = '$postData[price]'

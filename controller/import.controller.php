@@ -1,25 +1,47 @@
 <?php
 require_once '../model/config.model.php';
 date_default_timezone_set("Asia/Bangkok");
-if (!isset($_SESSION)) { session_start(); }
+if (!isset($_SESSION)) {
+    session_start();
+}
 
-class Import_controller {
-    public static function handler ($postData) {
+class Import_controller
+{
+    public static function handler($postData)
+    {
         switch ($postData['type']) {
-            case 'get-detail': self::getDetail($postData);  break;
-            case 'add-temp': self::addTemp($postData);  break;
-            case 'get-temp': self::getTemp();  break;
-            case 'get-sum': self::getSum();  break;
-            case 'edit-qty': self::editQty($postData);  break;
-            case 'edit-discount': self::editDiscount($postData);  break;
-            case 'end-sale': self::endSale($postData);  break;
-            case 'remove-temp': self::removeTemp();  break;
-            case 'remove-temp-one': self::removeTempOne($postData);  break;
+            case 'get-detail':
+                self::getDetail($postData);
+                break;
+            case 'add-temp':
+                self::addTemp($postData);
+                break;
+            case 'get-temp':
+                self::getTemp();
+                break;
+            case 'get-sum':
+                self::getSum();
+                break;
+            case 'edit-qty':
+                self::editQty($postData);
+                break;
+            case 'edit-discount':
+                self::editDiscount($postData);
+                break;
+            case 'end-sale':
+                self::endSale($postData);
+                break;
+            case 'remove-temp':
+                self::removeTemp();
+                break;
+            case 'remove-temp-one':
+                self::removeTempOne($postData);
+                break;
         }
     }
-    public static function getDetail($postData) {
-        $sql = "
-            SELECT
+    public static function getDetail($postData)
+    {
+        $sql = "SELECT
                 t1.id AS id,
                 t1.product_code AS product_code,
                 t1.product_name AS product_name,
@@ -50,7 +72,8 @@ class Import_controller {
             ]);
         }
     }
-    public static function findExists($product_code)   {
+    public static function findExists($product_code)
+    {
         $sql = "SELECT product_code FROM transaction_temp WHERE product_code = '$product_code'";
         $query = Backend::MySQL()->query($sql);
         if ($query->num_rows == 0) {
@@ -59,10 +82,10 @@ class Import_controller {
             return false;
         }
     }
-    public static function getTemp() {
+    public static function getTemp()
+    {
         $user_id = $_SESSION['userid'];
-        $sql = "
-            SELECT
+        $sql = "SELECT
                 t1.product_code AS product_code,
                 t2.product_name AS product_name,
                 t3.category_name AS category_name,
@@ -102,7 +125,7 @@ class Import_controller {
                         <td width='20%'>
                             <input type='text' class='form-control' value='$v[discount]' id='btn-discount-edit' data-id='$v[product_code]'>
                         </td>
-                        <td><b>". number_format($v['total'], 2) ."</b></td>
+                        <td><b>" . number_format($v['total'], 2) . "</b></td>
                         <td>
                             <a
                                 class='btn btn-danger'
@@ -128,10 +151,10 @@ class Import_controller {
             ]);
         }
     }
-    public static function addTemp($postData) {
+    public static function addTemp($postData)
+    {
         if (self::findExists($postData['product_code'])) {
-            $sql = "
-                INSERT INTO
+            $sql = "INSERT INTO
                     transaction_temp
                 SET
                     is_type = 'นำเข้า',
@@ -162,10 +185,10 @@ class Import_controller {
             ]);
         }
     }
-    public static function getSum() {
+    public static function getSum()
+    {
         $user_id = $_SESSION['userid'];
-        $sql = "
-            SELECT
+        $sql = "SELECT
                 SUM(total) AS total
             FROM
                 transaction_temp
@@ -186,10 +209,10 @@ class Import_controller {
             ]);
         }
     }
-    public static function editQty($postData) {
+    public static function editQty($postData)
+    {
         $user_id = $_SESSION['userid'];
-        $sql = "
-            UPDATE
+        $sql = "UPDATE
                 transaction_temp
             SET
                 qty = '$postData[product_qty]'
@@ -209,10 +232,10 @@ class Import_controller {
             ]);
         }
     }
-    public static function editDiscount($postData) {
+    public static function editDiscount($postData)
+    {
         $user_id = $_SESSION['userid'];
-        $sql = "
-            UPDATE
+        $sql = "UPDATE
                 transaction_temp
             SET
                 discount = '$postData[discount]'
@@ -232,10 +255,10 @@ class Import_controller {
             ]);
         }
     }
-    public static function removeTemp() {
+    public static function removeTemp()
+    {
         $user_id = $_SESSION['userid'];
-        $sql = "
-            DELETE FROM
+        $sql = "DELETE FROM
                 transaction_temp
             WHERE
                 user_id = $user_id
@@ -251,10 +274,10 @@ class Import_controller {
             ]);
         }
     }
-    public static function removeTempOne($postData) {
+    public static function removeTempOne($postData)
+    {
         $user_id = $_SESSION['userid'];
-        $sql = "
-            DELETE FROM
+        $sql = "DELETE FROM
                 transaction_temp
             WHERE
                 product_code = '$postData[product_code]'
@@ -272,14 +295,14 @@ class Import_controller {
             ]);
         }
     }
-    public static function endSale($postData) {
+    public static function endSale($postData)
+    {
         $user_id = $_SESSION['userid'];
         try {
             $sql_temp = "SELECT * FROM `transaction_temp` WHERE user_id = $user_id";
             $query_temp = Backend::MySQL()->query($sql_temp);
             foreach ($query_temp as $row) {
-                $sql_insert = "
-                    INSERT INTO
+                $sql_insert = "INSERT INTO
                         `transaction`
                     SET
                         bill_id = '$postData[bill_id]',

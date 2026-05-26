@@ -10,8 +10,7 @@ class Stock_controller {
         }
     }
     public static function get() {
-        $sql = "
-            SELECT
+        $sql = "SELECT
                 t1.id AS id,
                 t1.product_code AS product_code,
                 t1.product_name AS product_name,

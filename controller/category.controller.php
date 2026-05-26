@@ -57,8 +57,7 @@ class Category_controller {
         }
     }
     public static function addCategory($postData) {
-        $sql = "
-            INSERT INTO
+        $sql = "INSERT INTO
                 category
             SET
                 category_name = '$postData[category_name]'
@@ -76,8 +75,7 @@ class Category_controller {
     }
     public static function Edit($postData) {
         $dateNow = date("Y-m-d H:i:s");
-        $sql = "
-            UPDATE
+        $sql = "UPDATE
                 category
             SET
                 category_name = '$postData[category_name]',
@@ -97,8 +95,7 @@ class Category_controller {
         }
     }
     public static function Delete($postData) {
-        $sql = "
-            DELETE FROM
+        $sql = "DELETE FROM
                 category
             WHERE
                 id = $postData[id]

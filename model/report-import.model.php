@@ -2,8 +2,7 @@
 require './model/config.model.php';
 class ReportImportModel {
     public static function _main($f, $t) {
-        $sql = "
-            SELECT
+        $sql = "SELECT
                 t1.bill_id AS bill_id,
                 t1.product_code AS product_code,
                 t2.product_name AS product_name,

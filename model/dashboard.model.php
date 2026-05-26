@@ -31,8 +31,7 @@ class DashboardModel {
         }
     }
     public static function SumByMonth() {
-        $sql = "
-            SELECT 
+        $sql = "SELECT 
                 CASE MONTH(transaction_date)
                     WHEN 1 THEN 'มกราคม'
                     WHEN 2 THEN 'กุมภาพันธ์'

@@ -14,8 +14,7 @@ class Auth_controller {
     }
     public static function logIn($postData) {
         $password = base64_encode($postData['password']);
-        $sql = "
-            SELECT
+        $sql = "SELECT
                 *
             FROM
                 users
@@ -69,11 +68,9 @@ class Auth_controller {
     }
     public static function Register ($postData) {
         $password = base64_encode($postData['password']);
-        $sql = "
-            INSERT INTO
+        $sql = "INSERT INTO
                 users
-            SET
-                username = '$postData[username]',
+            SET username = '$postData[username]',
                 password = '$password'
         ";
         $query = Backend::MySQL()->query($sql);

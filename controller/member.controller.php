@@ -59,8 +59,7 @@ class Member_controller {
         }
     }
     public static function addMember($postData) {
-        $sql = "
-            INSERT INTO
+        $sql = "INSERT INTO
                 member
             SET
                 member_name = '$postData[member_name]',
@@ -79,8 +78,7 @@ class Member_controller {
     }
     public static function Edit($postData) {
         $dateNow = date("Y-m-d H:i:s");
-        $sql = "
-            UPDATE
+        $sql = "UPDATE
                 member
             SET
                 member_name = '$postData[member_name]',
@@ -101,8 +99,7 @@ class Member_controller {
         }
     }
     public static function DElete($postData) {
-        $sql = "
-            DELETE FROM
+        $sql = "DELETE FROM
                 member
             WHERE
                 id = $postData[id]
