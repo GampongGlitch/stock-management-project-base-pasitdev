@@ -40,7 +40,7 @@ class ImportModel
             LEFT JOIN
                 users t4 ON t1.user_id = t4.id
             WHERE
-                bill_id = '$id' AND t1.is_type = 'นำเข้า'";
+                bill_id = '$id' AND t1.is_type IN ('นำเข้า')";
 
         $query = Backend::MySQL()->query($sql);
 

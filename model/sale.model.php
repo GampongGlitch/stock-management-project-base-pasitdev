@@ -64,7 +64,7 @@ class SaleModel
             LEFT JOIN
                 users t4 ON t1.user_id = t4.id
             WHERE
-                t1.bill_id = '$id' AND t1.is_type IN ('ขาย', 'เบิก', 'นำเข้า')";
+                t1.bill_id = '$id' AND t1.is_type IN ('ขาย', 'เบิก')";
 
         $query = Backend::MySQL()->query($sql);
 
