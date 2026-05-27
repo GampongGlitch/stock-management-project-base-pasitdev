@@ -131,9 +131,9 @@
                     $.post('controller/category.controller.php', formData, (response) => {
                         if (response.message == 'success') {
                             fetchData();
-                            alertify.success("Deleted");
+                            alertify.success("Edited");
                         } else {
-                            alertify.error("Delete Failed");
+                            alertify.error("Edit Failed");
                         }
                     })
                 }, () => {}
